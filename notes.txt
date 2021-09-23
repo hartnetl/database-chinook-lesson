@@ -1,73 +1,32 @@
-Steps taken:
+This is for the lessons on ORMs.
+we're skipping the lowest level of abstraction because that was covered with the basic chinook lessons.
+This covers the middle level
+The punctuation isn't as important here
 
-DOWNLOAD CHINOOK FILES  
-* type "wget wget https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_PostgreSql.sql"
-into the terminal.  
-This downloads the postgres chinook file into our file explorer.  
+INSTALL SQLAlchemy
 
-CREATE CHINOOK DATABASE  
-* Enter the following into the terminal:  
-    set_pg (This needs to be done everytime you open the workspace)
-    psql (This opens postgres)
-    \l (to view databases)
-    CREATE DATABASE chinook; (Create new database. Don't forget the ; )
-    \c database_name (switch between databases)
+    * pip3 install SQLAlchemy
 
-INSTALL CHINOOK
-* Enter this into the terminal:  
-\i Chinook_PostgreSql.sql   
-the filename is the one that was downloaded from the wget command above. 
-The installation takes a few minutes.
+CREATE SQL-EXPRESSSION.PY FILE
+    Set it up as follows:
 
-TEST IT INSTALLED CORRECTLY
-* \q (QUIT THE SERVER)
-* q (quit search)
-* psql -d chinook (connect to chinook)
-* \dt (display tables from database)
-* SELECT * FROM "Artist"; (get all artists - always use double quotes here)
-* SELECT NAME FROM "Artist";"
-* SELECT * FROM "Artist" WHERE "Name" = 'Queen';
-* SELECT * FROM "Album" WHERE "ArtistId" = 51;
-* SELECT * FROM "Track" WHERE "Composer" = Queen;
+        from sqlalchemy import (
+            create_engine, Table, Column, Float, ForeignKey, Integer, String, MetaData
+        )
 
-SEND RESULTS TO CSV AND JSON FILES
-* \copy (SELECT * FROM "Track" WHERE "Composer" = 'Queen') TO 'test.csv' WITH CSV DELIMITER ',' HEADER;  
-\o test.json  
-SELECT json_agg(t) FROM (SELECT * FROM "Track" WHERE "Composer" = 'Queen') t; 
+        # executing the instructions from our localhost "chinook" db
+        db = create_engine("postgresql:///chinook")
 
-alt + sht + f on json file to format
+        meta = MetaData(db)
 
-INSTALL PSYCOPG2
-* pip3 install psycopg2
-* Create python file sql-psycopg2.python
-* Fill it out as per the file
-        *
-        import psycopg2
+        # making the connection
+        with db.connect() as connection:
 
-        # connect to "chinook" database
-        connection = psycopg2.connect(database="chinook")
+ADD YOUR QUERIES
 
-        # build a cursor object of the database. A cursor is a list, like an array in JS
-        # anything that we query from the database will become part of this cursor object,
-        # and to read that data, we should iterate over the cursor using a for-loop, as an example.
-        cursor = connection.cursor()
-
-        # Enter queries here, one by one
-
-        # Query 1 - select all records from the "Artist" table
-        # cursor.execute('SELECT * FROM "Artist"')
-
-        # fetch the results (multiple)
-        results = cursor.fetchall()
-
-        # Or use this to fetch one result (single)
-        # results = cursor.fetchone()
-
-        # close the connection
-        connection.close()
-
-        # print results
-        for result in results:
-            print(result)
-
-
+    Run chinook 
+        * set_pg
+        * psql -d chinook
+        * SELECT * FROM "Artist" WHERE false;
+            # This step above is the quickest way to view the headers of the Artist table
+            # We get ArtistId and name, so these can be added to your query

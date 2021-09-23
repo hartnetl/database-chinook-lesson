@@ -1,0 +1,83 @@
+Steps taken:
+
+DOWNLOAD CHINOOK FILES  
+* type "wget wget https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_PostgreSql.sql"
+into the terminal.  
+This downloads the postgres chinook file into our file explorer.  
+
+CREATE CHINOOK DATABASE  
+* Enter the following into the terminal:  
+    set_pg (This needs to be done everytime you open the workspace)
+    psql (This opens postgres)
+    \l (to view databases)
+    CREATE DATABASE chinook; (Create new database. Don't forget the ; )
+    \c database_name (switch between databases)
+
+INSTALL CHINOOK
+* Enter this into the terminal:  
+\i Chinook_PostgreSql.sql   
+the filename is the one that was downloaded from the wget command above. 
+The installation takes a few minutes.
+
+TEST IT INSTALLED CORRECTLY
+* \q (QUIT THE SERVER)
+* q (quit search)
+* psql -d chinook (connect to chinook)
+* \dt (display tables from database)
+* SELECT * FROM "Artist"; (get all artists - always use double quotes here)
+* SELECT NAME FROM "Artist";"
+* SELECT * FROM "Artist" WHERE "Name" = 'Queen';
+* SELECT * FROM "Album" WHERE "ArtistId" = 51;
+* SELECT * FROM "Track" WHERE "Composer" = Queen;
+
+SEND RESULTS TO CSV AND JSON FILES
+* \copy (SELECT * FROM "Track" WHERE "Composer" = 'Queen') TO 'test.csv' WITH CSV DELIMITER ',' HEADER;  
+\o test.json  
+SELECT json_agg(t) FROM (SELECT * FROM "Track" WHERE "Composer" = 'Queen') t; 
+
+alt + sht + f on json file to format
+
+INSTALL PSYCOPG2
+* pip3 install psycopg2
+* Create python file sql-psycopg2.python
+* Fill it out as per the file
+        *
+        import psycopg2
+
+        # connect to "chinook" database
+        connection = psycopg2.connect(database="chinook")
+
+        # build a cursor object of the database. A cursor is a list, like an array in JS
+        # anything that we query from the database will become part of this cursor object,
+        # and to read that data, we should iterate over the cursor using a for-loop, as an example.
+        cursor = connection.cursor()
+
+        # Enter queries here, one by one
+
+        # Query 1 - select all records from the "Artist" table
+        # cursor.execute('SELECT * FROM "Artist"')
+
+        # fetch the results (multiple)
+        results = cursor.fetchall()
+
+        # Or use this to fetch one result (single)
+        # results = cursor.fetchone()
+
+        # close the connection
+        connection.close()
+
+        # print results
+        for result in results:
+            print(result)
+
+##########################
+NOTE:
+When I try to run the py file I get an error. Been on to 
+tutor support and they don't know why either. So I skipped it, 
+that bit in the video is optional anyway.
+##########################
+
+NOW ONTO THE NEXT LESSON : ORMs
+https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+DB101+2021_T1/courseware/c0c31790fcf540539fd2bd3678b12406/22de863d16b346c6bdbb1945f63770ea/
+
+
