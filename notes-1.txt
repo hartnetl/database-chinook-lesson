@@ -75,6 +75,9 @@ NOTE:
 When I try to run the py file I get an error. Been on to 
 tutor support and they don't know why either. So I skipped it, 
 that bit in the video is optional anyway.
+
+NOTE 2:
+IT DIDN'T WORK CAUSE YOU NEED TO RUN CHINOOK IN BOTH TERMINALS 
 ##########################
 
 NOW ONTO THE NEXT LESSON : ORMs
