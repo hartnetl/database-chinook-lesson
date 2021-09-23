@@ -1,0 +1,109 @@
+# These two lessons are gonna focus on CRUD. 
+The first focuses on CR (create, read) and the second on ud (update delete)
+These notes will cover both.
+
+create FILE 
+    sql-crud.PY
+
+SET UP FILE AS so
+
+    from sqlalchemy import (
+        create_engine, Column, Integer, String
+    )
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+
+
+    # executing the instructions from the "chinook" database
+    db = create_engine("postgresql:///chinook")
+    base = declarative_base()
+
+    # create a new instance of sessionmaker and point to our engine (the db)
+    Session = sessionmaker(db)
+    session = Session()
+
+    # creating the database using declarative_base subclass
+    base.metadata.create_all(db)
+
+
+CREATE A NEW TABLE CLASS BETWEEN BASE AND SESSION - THE C
+
+    # create a class-based model for the "Programmer" table
+    class Programmer(base):
+        __tablename__ = "Programmer"
+        id = Column(Integer, primary_key=True)
+        first_name = Column(String)
+        last_name = Column(String)
+        gender = Column(String)
+        nationality = Column(String)
+        famous_for = Column(String)
+
+ADD IN YOUR ENTRIES AT THE BOTTOM OF YOUR FILE
+
+    # creating records on our Progammer table
+    ada_lovelace = Programmer(
+        first_name="Ada",
+        last_name="Lovelace",
+        gender="F",
+        nationality="British",
+        famous_for="First Programmer"
+    )
+
+    alan_turing = Programmer(
+        first_name="Alan",
+        last_name="Turing",
+        gender="M",
+        nationality="British",
+        famous_for="Modern Computing"
+    )
+
+    grace_hopper = Programmer(
+        first_name="Grace",
+        last_name="Hopper",
+        gender="F",
+        nationality="American",
+        famous_for="COBOL language"
+    )
+
+    margaret_hamilton = Programmer(
+        first_name="Margaret",
+        last_name="Hamilton",
+        gender="F",
+        nationality="American",
+        famous_for="Apollo 11"
+    )
+
+    bill_gates = Programmer(
+        first_name="Bill",
+        last_name="Gates",
+        gender="M",
+        nationality="American",
+        famous_for="Microsoft"
+    )
+
+    tim_berners_lee = Programmer(
+        first_name="Tim",
+        last_name="Berners-Lee",
+        gender="M",
+        nationality="British",
+        famous_for="World Wide Web"
+    )
+
+Adding files to the database is similar to pushing to github:
+THEN ADD EACH ENTRY TO THE SESSION
+    session.add(ada_lovelace)
+
+THEN COMMIT THE SESSION TO THE database
+    session.commit()
+
+CHECK THAT WORKED - THE R
+    programmers = session.query(Programmer)
+    for programmer in programmers:
+        print(
+            programmer.id,
+            programmer.first_name + " " + programmer.last_name,
+            programmer.gender,
+            programmer.nationality,
+            programmer.famous_for,
+            sep=" | "
+        )
